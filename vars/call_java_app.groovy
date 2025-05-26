@@ -1,7 +1,7 @@
 
+
 def call() {
-    def dockerx = new org.iti.docker()
-    
+    @Library('libx@main')_
     pipeline{
         agent {
             label 'bash'
