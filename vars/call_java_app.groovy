@@ -1,7 +1,7 @@
 
 
 def call() {
-    def dockerx = new org.iti.docker()
+    def dockerx = new org.iti.docker(this)
     pipeline{
         agent {
             label 'bash'
@@ -20,7 +20,7 @@ def call() {
             stage("build java app image"){
                 steps{
                     script{
-                        def dockerx = new org.iti.docker()
+                    
                         dockerx.build("meldeeeb/java-app", "${BUILD_NUMBER}")
                     }
                 }
@@ -28,7 +28,7 @@ def call() {
             stage("push java app image"){
                 steps{
                     script{
-                        def dockerx = new org.iti.docker()
+                      
                         dockerx.login(env.DOCKER_CREDS_USR, env.DOCKER_CREDS_PSW)
                         dockerx.push("meldeeeb/java-app", "${BUILD_NUMBER}")
                     }
