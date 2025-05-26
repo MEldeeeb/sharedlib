@@ -1,30 +1,28 @@
 def call() {
-    pipeline {
-        agent {
+    pipeline{
+        agent{
             label "bash"
         }
 
         environment {
             DOCKER_CREDS = credentials('dockerhub-user')
         }
-
-        stages {
-            stage("build Docker image using python") {
-                steps {
-                    script {
-                        def dockerx = new org.iti.docker(this)
-                        dockerx.build("meldeeeb/python-app", "${BUILD_NUMBER}")
-                    }
+        
+        stages{
+           
+            stage("build Docker image"){
+                steps{
+                    sh "docker build -t meldeeeb/l_2:v${BUILD_NUMBER} ."
+                }
+            } 
+            stage("Login to Docker Hub"){
+                steps{
+                    sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
                 }
             }
-
-            stage("push Docker image using python") {
-                steps {
-                    script {
-                        def dockerx = new org.iti.docker(this)
-                        dockerx.login(env.DOCKER_CREDS_USR, env.DOCKER_CREDS_PSW)
-                        dockerx.push("meldeeeb/python-app", "${BUILD_NUMBER}")
-                    }
+            stage("Push Docker image"){
+                steps{
+                    sh "docker push meldeeeb/l_2:v${BUILD_NUMBER}"
                 }
             }
         }
