@@ -1,15 +1,11 @@
-
 def call() {
-
     pipeline{
         agent {
             label 'bash'
         }
-
         environment {
             DOCKER_CREDS = credentials('dockerhub-user')
         }
-
         stages{
             stage("Build java app"){
                 steps{
