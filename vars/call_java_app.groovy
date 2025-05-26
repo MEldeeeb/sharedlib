@@ -1,7 +1,6 @@
 
-
 def call() {
-    def dockerx = new org.iti.docker(this)
+
     pipeline{
         agent {
             label 'bash'
@@ -19,19 +18,17 @@ def call() {
             }
             stage("build java app image"){
                 steps{
-                    script{
-                    
-                        dockerx.build("meldeeeb/java-app", "${BUILD_NUMBER}")
-                    }
+                    sh "docker build -t meldeeeb/java-app:v${BUILD_NUMBER} ."
+                }
+            }
+            stage("Login to Docker Hub"){
+                steps{
+                    sh "docker login -u ${DOCKER_CREDS_USR} -p ${DOCKER_CREDS_PSW}"
                 }
             }
             stage("push java app image"){
                 steps{
-                    script{
-                      
-                        dockerx.login(env.DOCKER_CREDS_USR, env.DOCKER_CREDS_PSW)
-                        dockerx.push("meldeeeb/java-app", "${BUILD_NUMBER}")
-                    }
+                    sh "docker push meldeeeb/java-app:v${BUILD_NUMBER}"
                 }
             }
         }
