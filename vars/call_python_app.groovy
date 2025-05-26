@@ -1,6 +1,6 @@
 
 def call() {
-    def dockerx = new org.iti.docker()
+    def dockerx = new org.iti.docker(this)
     pipeline{
         agent{
             label "bash"
@@ -13,7 +13,6 @@ def call() {
             stage("build Docker image using python"){
                 steps{
                     script{
-                        def dockerx = new org.iti.docker()
                         dockerx.build("meldeeeb/python-app", "${BUILD_NUMBER}")
                     }
                 
@@ -22,7 +21,6 @@ def call() {
             stage("push Docker image using python"){
                 steps{
                     script{
-                        def dockerx = new org.iti.docker()
                         dockerx.login(env.DOCKER_CREDS_USR, env.DOCKER_CREDS_PSW)
                         dockerx.push("meldeeeb/python-app", "${BUILD_NUMBER}")
 
