@@ -10,8 +10,6 @@ def call() {
             DOCKER_CREDS = credentials('dockerhub-user')
         }
 
-
-
         stages{
             stage("build Docker image using python"){
                 steps{
